@@ -1,4 +1,4 @@
-// js/app.js
+// js/app.js - FULL PERUBAHAN
 // ============================================
 // STORE APPLICATION - Main App
 // ============================================
@@ -132,7 +132,7 @@ class StoreApp {
   }
 
   // ==========================================
-  // WHATSAPP FLOATING BUTTON
+  // WHATSAPP FLOATING BUTTON - PERUBAHAN
   // ==========================================
   initWhatsAppButton() {
     if (document.getElementById('waFloatBtn')) {
@@ -165,11 +165,8 @@ class StoreApp {
     const msg = `Halo ${shopName}, saya ingin bertanya tentang produk yang tersedia.`;
     btn.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
 
-    if (this.cartCount() > 0 && this.view === 'store' && !this.showQRIS) {
-      btn.classList.add('with-cart-bar');
-    } else {
-      btn.classList.remove('with-cart-bar');
-    }
+    // Hapus class 'with-cart-bar' - WA button selalu di bawah tombol dark mode
+    btn.classList.remove('with-cart-bar');
   }
 
   showError(title, message) {
@@ -361,10 +358,14 @@ class StoreApp {
     }, 0);
   }
 
+  // ==========================================
+  // FREE ONGKIR - PERUBAHAN
+  // ==========================================
   // Ongkir gratis jika subtotal (setelah diskon) >= batas minimal di pengaturan.
   isFreeShippingEligible() {
     const min = this.settings?.freeShippingMinAmount ?? CONFIG.DEFAULT_SETTINGS.freeShippingMinAmount;
     const subtotalAfterDiscount = this.cartTotal() - this.promoDiscount;
+    // Pastikan min > 0 dan subtotalAfterDiscount >= min
     return min > 0 && subtotalAfterDiscount >= min;
   }
 
@@ -686,7 +687,6 @@ class StoreApp {
       this.promoCode = '';
       this.promoDiscount = 0;
 
-      // PERBAIKAN: Gunakan trackBeginCheckout (bukan trackCheckout)
       Analytics.trackBeginCheckout(total, items.length);
 
       // Show QRIS popup
@@ -814,7 +814,6 @@ class StoreApp {
     this.view = 'order-success';
     this.render();
 
-    // PERBAIKAN: Gunakan trackPurchase (bukan trackOrderComplete)
     Analytics.trackPurchase(order.id, order.total, order.items);
 
     Notification.success('📱 WhatsApp terbuka! Kirim bukti transfer Anda.');
